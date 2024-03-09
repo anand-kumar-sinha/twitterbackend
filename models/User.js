@@ -9,6 +9,7 @@ const userModel = mongoose.Schema(
     email: {
       type: String,
       required: [true, "Please Enter your email"],
+      unique: true,
     },
     username: {
       type: String,
