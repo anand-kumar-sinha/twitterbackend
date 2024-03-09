@@ -14,7 +14,7 @@ const registerUser = async (req, res) => {
       return;
     }
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email, username });
 
     if (existingUser) {
       res.status(401).json({
