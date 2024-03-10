@@ -20,6 +20,10 @@ const userModel = mongoose.Schema(
       type: String,
       required: [true, "Please Enter your password"],
     },
+    avatar:{
+      type: String,
+      default: 'https://wallpaperforu.com/wp-content/uploads/2022/12/Mangekyou-Sharingan-Wallpaper-Hd.jpg'
+    }
   },
   {
     timestamps: true,
