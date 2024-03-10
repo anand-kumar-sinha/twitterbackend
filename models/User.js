@@ -20,10 +20,14 @@ const userModel = mongoose.Schema(
       type: String,
       required: [true, "Please Enter your password"],
     },
-    avatar:{
+    avatar: {
       type: String,
-      default: 'https://upload.wikimedia.org/wikipedia/commons/1/17/Mangekyou_Sharingan_Itachi.svg'
-    }
+      default:
+        "https://upload.wikimedia.org/wikipedia/commons/1/17/Mangekyou_Sharingan_Itachi.svg",
+    },
+    bio: {
+      type: String,
+    },
   },
   {
     timestamps: true,
