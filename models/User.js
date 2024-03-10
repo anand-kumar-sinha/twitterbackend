@@ -22,7 +22,7 @@ const userModel = mongoose.Schema(
     },
     avatar:{
       type: String,
-      default: 'https://wallpaperforu.com/wp-content/uploads/2022/12/Mangekyou-Sharingan-Wallpaper-Hd.jpg'
+      default: 'https://upload.wikimedia.org/wikipedia/commons/1/17/Mangekyou_Sharingan_Itachi.svg'
     }
   },
   {

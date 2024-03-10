@@ -17,7 +17,6 @@ const registerUser = async (req, res) => {
     const existingUser = await User.findOne({ username });
     const existingUser1 = await User.findOne({ email });
 
-
     if (existingUser || existingUser1) {
       res.status(401).json({
         success: false,
@@ -76,7 +75,7 @@ const loginUser = async (req, res) => {
       return;
     }
 
-    const token = generateToken(user._id)
+    const token = generateToken(user._id);
 
     res.status(200).json({
       success: true,
@@ -91,7 +90,34 @@ const loginUser = async (req, res) => {
     });
   }
 };
+
+const myProfile = async (req, res) => {
+  try {
+    const user = req?.user;
+    if (!user) {
+      res.status(401).json({
+        success: false,
+        message: "Please Login Again",
+      });
+
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Welcome ${user.name}`,
+      user,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
+  myProfile,
 };
