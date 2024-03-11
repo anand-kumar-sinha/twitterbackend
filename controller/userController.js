@@ -305,6 +305,30 @@ const createPost = async (req, res) => {
   }
 };
 
+const findAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.find({}).populate("admin", "-password");
+
+    if (!posts) {
+      return res.status(404).json({
+        success: false,
+        message: "No posts found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Posts fetched successfully",
+      posts: posts.reverse(),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -314,4 +338,5 @@ module.exports = {
   fetchUserId,
   followUser,
   createPost,
+  findAllPosts
 };

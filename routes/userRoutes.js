@@ -1,6 +1,6 @@
 const express = require('express')
 const {protect} = require('../middleware/Auth')
-const { registerUser, loginUser, myProfile, editProfile, fetchAllUser, fetchUserId, followUser, createPost } = require('../controller/userController')
+const { registerUser, loginUser, myProfile, editProfile, fetchAllUser, fetchUserId, followUser, createPost, findAllPosts } = require('../controller/userController')
 
 const router = express.Router()
 
@@ -12,5 +12,6 @@ router.route('/allusers').get(protect, fetchAllUser)
 router.route('/user/:id').get(protect, fetchUserId)
 router.route('/follow/:id').put(protect, followUser)
 router.route('/createpost').put(protect, createPost)
+router.route('/allposts').get(protect, findAllPosts)
 
 module.exports = router;
