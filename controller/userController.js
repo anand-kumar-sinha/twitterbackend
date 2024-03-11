@@ -163,9 +163,63 @@ const editProfile = async (req, res) => {
   }
 };
 
+const fetchAllUser = async (req, res) => {
+  try {
+    const users = await User.find();
+
+    res.status(200).json({
+      success: true,
+      message: "Users fetched successfully",
+      users,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
+const fetchUserId = async (req, res) => {
+  try {
+    const {id} = req.params;
+
+    if(!id){
+      res.status(401).json({
+        success: false,
+        message: "Please provide user id",
+      });
+      return;
+    }
+
+    const user = await User.findById(id);
+
+    if(!user) {
+      res.status(401).json({
+        success: false,
+        message: "User not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User fetched successfully",
+      user,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error,
+    });
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
   myProfile,
   editProfile,
+  fetchAllUser,
+  fetchUserId
 };
