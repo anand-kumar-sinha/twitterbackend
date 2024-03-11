@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const generate = require("../middleware/generateToken");
 const generateToken = require("../middleware/generateToken");
+const Post = require("../models/Post");
 
 const registerUser = async (req, res) => {
   try {
@@ -182,9 +183,9 @@ const fetchAllUser = async (req, res) => {
 
 const fetchUserId = async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
 
-    if(!id){
+    if (!id) {
       res.status(401).json({
         success: false,
         message: "Please provide user id",
@@ -194,7 +195,7 @@ const fetchUserId = async (req, res) => {
 
     const user = await User.findById(id);
 
-    if(!user) {
+    if (!user) {
       res.status(401).json({
         success: false,
         message: "User not found",
@@ -213,14 +214,14 @@ const fetchUserId = async (req, res) => {
       message: error,
     });
   }
-}
+};
 
 const followUser = async (req, res) => {
   try {
     const userFollow = await User.findById(req.params.id);
     const loggedUser = await User.findById(req.user._id);
 
-    if(loggedUser._id === userFollow._id) {
+    if (loggedUser._id === userFollow._id) {
       return res.status(401).json({
         success: false,
         message: "You cannot follow yourself",
@@ -265,9 +266,44 @@ const followUser = async (req, res) => {
     res.status(400).json({
       success: false,
       message: error,
-    })
+    });
   }
-}
+};
+
+const createPost = async (req, res) => {
+  try {
+    const newPost = {
+      desc: req.body.desc,
+      postImg: req.body.postImg,
+      admin: req.user._id,
+    };
+
+    if (!newPost.desc) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter post description",
+      });
+    }
+
+    const user = await User.findById(req.user._id);
+
+    const post = await Post.create(newPost);
+
+    user.posts.push(post._id);
+    user.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Post created successfully",
+      post,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
 
 module.exports = {
   registerUser,
@@ -276,5 +312,6 @@ module.exports = {
   editProfile,
   fetchAllUser,
   fetchUserId,
-  followUser
+  followUser,
+  createPost,
 };
