@@ -198,7 +198,7 @@ const fetchUserId = async (req, res) => {
       return;
     }
 
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate("posts");
 
     if (!user) {
       res.status(401).json({
