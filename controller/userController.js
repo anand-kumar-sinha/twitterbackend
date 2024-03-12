@@ -104,10 +104,20 @@ const myProfile = async (req, res) => {
       return;
     }
 
+    const id = req.user._id;
+
+    const posts = await User.findById(id).populate("posts");
+    res.status(200).json({
+      success: true,
+      message: "Posts fetched successfully",
+      posts: posts.posts.reverse(),
+    });
+
     res.status(200).json({
       success: true,
       message: `Welcome ${user.name}`,
       user,
+      posts
     });
   } catch (error) {
     res.status(400).json({
@@ -329,6 +339,23 @@ const findAllPosts = async (req, res) => {
   }
 };
 
+const myPosts = async (req,res) => {
+  try {
+    const id = req.user._id;
+
+    const posts = await User.findById(id).populate("posts");
+    res.status(200).json({
+      success: true,
+      message: "Posts fetched successfully",
+      posts: posts.posts.reverse(),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+}
 module.exports = {
   registerUser,
   loginUser,
@@ -338,5 +365,6 @@ module.exports = {
   fetchUserId,
   followUser,
   createPost,
-  findAllPosts
+  findAllPosts,
+  myPosts
 };
