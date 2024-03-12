@@ -13,6 +13,6 @@ router.route('/user/:id').get(protect, fetchUserId)
 router.route('/follow/:id').put(protect, followUser)
 router.route('/createpost').put(protect, createPost)
 router.route('/allposts').get(protect, findAllPosts)
-router.route('/myposts').get(protect, myPosts)
+// router.route('/myposts').get(protect, myPosts)
 
 module.exports = router;
