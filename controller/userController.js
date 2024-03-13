@@ -112,7 +112,7 @@ const myProfile = async (req, res) => {
       success: true,
       message: `Welcome ${user.name}`,
       user,
-      posts: posts.posts.reverse(),
+      posts: posts.posts,
     });
   } catch (error) {
     res.status(400).json({
@@ -333,7 +333,6 @@ const findAllPosts = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   registerUser,
