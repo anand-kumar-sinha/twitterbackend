@@ -9,6 +9,7 @@ const protect = async (req, res, next) => {
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
     ) {
+      console.log('start')
       try {
         token = req.headers.authorization.split(" ")[1];
 
@@ -16,7 +17,6 @@ const protect = async (req, res, next) => {
 
         req.user = await User.findById(decoded.id).select("-password");
 
-        console.log(req.headers.authorization.split(" ")[1])
         next();
       } catch (error) {
         res.status(402).json({
