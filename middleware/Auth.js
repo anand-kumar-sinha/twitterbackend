@@ -26,8 +26,8 @@ const protect = async (req, res, next) => {
       }
     }
 
+    console.log('token wala hai')
     if (!token) {
-      console.log('token wala hai')
       res.status(401).json({
         success: false,
         message: "Not authorized, token failed",
