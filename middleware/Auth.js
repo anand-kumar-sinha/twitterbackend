@@ -18,7 +18,7 @@ const protect = async (req, res, next) => {
 
         next();
       } catch (error) {
-        res.status(401).json({
+        res.status(402).json({
           success: false,
           error: error,
         });
@@ -32,7 +32,7 @@ const protect = async (req, res, next) => {
       });
     }
   } catch (error) {
-    res.status(401).json({
+    res.status(404).json({
       success: false,
       error: error,
     });
