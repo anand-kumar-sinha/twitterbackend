@@ -18,6 +18,7 @@ const protect = async (req, res, next) => {
 
         next();
       } catch (error) {
+        console.log(token)
         res.status(401).json({
           success: false,
           error: error,
@@ -26,7 +27,7 @@ const protect = async (req, res, next) => {
     }
 
     if (!token) {
-      console.log(token)
+      console.log('token wala hai')
       res.status(401).json({
         success: false,
         message: "Not authorized, token failed",
