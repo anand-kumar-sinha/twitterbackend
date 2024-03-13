@@ -22,6 +22,7 @@ const protect = async (req, res, next) => {
           success: false,
           error: error,
         });
+        console.log('first')
       }
     }
 
@@ -30,12 +31,16 @@ const protect = async (req, res, next) => {
         success: false,
         message: "Not authorized, token failed",
       });
+      console.log('second')
+
     }
   } catch (error) {
     res.status(404).json({
       success: false,
       error: error,
     });
+    console.log('third')
+
   }
 };
 
