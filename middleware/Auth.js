@@ -18,7 +18,6 @@ const protect = async (req, res, next) => {
 
         next();
       } catch (error) {
-        console.log(token)
         res.status(401).json({
           success: false,
           error: error,
@@ -26,7 +25,6 @@ const protect = async (req, res, next) => {
       }
     }
 
-    console.log('token wala hai')
     if (!token) {
       res.status(401).json({
         success: false,
