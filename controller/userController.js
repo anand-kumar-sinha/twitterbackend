@@ -112,7 +112,7 @@ const myProfile = async (req, res) => {
       success: true,
       message: `Welcome ${user.name}`,
       user,
-      posts: posts.posts,
+      posts: posts.posts.reverse(),
     });
   } catch (error) {
     res.status(400).json({
