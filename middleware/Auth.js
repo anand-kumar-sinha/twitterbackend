@@ -16,8 +16,8 @@ const protect = async (req, res, next) => {
 
         req.user = await User.findById(decoded.id).select("-password");
 
-        next();
         console.log(token)
+        next();
       } catch (error) {
         res.status(402).json({
           success: false,
