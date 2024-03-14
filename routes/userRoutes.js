@@ -10,7 +10,7 @@ router.route('/me').get(protect, myProfile)
 router.route('/editprofile').put(protect, editProfile)
 router.route('/allusers').get(protect, fetchAllUser)
 router.route('/user/:id').get(protect, fetchUserId)
-router.route('/follow/:id').put(protect, followUser)
+router.route('/follow/:id').post(protect, followUser)
 router.route('/createpost').put(protect, createPost)
 router.route('/allposts').get(protect, findAllPosts)
 
