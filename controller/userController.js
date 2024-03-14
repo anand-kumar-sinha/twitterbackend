@@ -334,6 +334,38 @@ const findAllPosts = async (req, res) => {
   }
 };
 
+const findFollowingPosts = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    let posts = await Post.find({
+      admin: {
+        $in: user.followings,
+      },
+    })
+      .populate("admin")
+      .populate("likes")
+      .populate("comments")
+      .populate("comments.user")
+      .populate("retweets")
+
+    let index = [];
+    for (let i = 0; i < 2; i++) {
+      index.push(posts[i]);
+    }
+
+    res.status(200).json({
+      success: true,
+      posts: index.reverse(),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
@@ -344,4 +376,5 @@ module.exports = {
   followUser,
   createPost,
   findAllPosts,
+  findFollowingPosts,
 };
