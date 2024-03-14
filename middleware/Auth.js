@@ -5,11 +5,12 @@ const protect = async (req, res, next) => {
   try {
     let token;
 
+    console.log(req)
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
     ) {
-      console.log('start')
+
       try {
         token = req.headers.authorization.split(" ")[1];
 
