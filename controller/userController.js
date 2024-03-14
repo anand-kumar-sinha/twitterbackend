@@ -350,7 +350,7 @@ const findFollowingPosts = async (req, res) => {
       .populate("retweets")
 
     let index = [];
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < posts.length; i++) {
       index.push(posts[i]);
     }
 
