@@ -366,6 +366,33 @@ const findFollowingPosts = async (req, res) => {
   }
 }
 
+const searchUser = async (req, res) => {
+  try {
+    const student = await User.find({
+      $or: [
+        { name: { $regex: req.params.key, $options: "i" } },
+        { username: { $regex: req.params.key, $options: "i" } },
+      ],
+    });
+    if (!student) {
+      return res.status(400).json({
+        success: false,
+        message: "NO students found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      student,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
@@ -377,4 +404,5 @@ module.exports = {
   createPost,
   findAllPosts,
   findFollowingPosts,
+  searchUser
 };
