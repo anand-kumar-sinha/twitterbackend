@@ -347,7 +347,7 @@ const findFollowingPosts = async (req, res) => {
       .populate("likes")
       .populate("comments")
       .populate("comments.user")
-      .populate("retweets")
+      .populate("retweets");
 
     let index = [];
     for (let i = 0; i < posts.length; i++) {
@@ -364,7 +364,7 @@ const findFollowingPosts = async (req, res) => {
       message: error.message,
     });
   }
-}
+};
 
 const searchUser = async (req, res) => {
   try {
@@ -391,8 +391,41 @@ const searchUser = async (req, res) => {
       message: error.message,
     });
   }
-}
+};
 
+const UserStatus = async (req, res) => {
+  try {
+    const user = req.user;
+    const { url } = req.body;
+    if (!user) {
+      res.status(400).json({
+        success: false,
+        message: "Please Login Again",
+      });
+    }
+
+    if (!url) {
+      res.status(404).json({
+        success: false,
+        message: "Please provide url",
+      });
+    }
+
+    user.status = url;
+    user.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Status updated successfully",
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
 module.exports = {
   registerUser,
   loginUser,
@@ -404,5 +437,6 @@ module.exports = {
   createPost,
   findAllPosts,
   findFollowingPosts,
-  searchUser
+  searchUser,
+  UserStatus,
 };

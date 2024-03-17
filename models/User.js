@@ -45,7 +45,10 @@ const userModel = mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
       }
-    ]
+    ],
+    status: {
+      type: String,
+    }
   },
   {
     timestamps: true,
