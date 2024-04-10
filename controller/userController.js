@@ -426,6 +426,53 @@ const UserStatus = async (req, res) => {
     });
   }
 };
+
+const deletePost = async (req, res) => {
+  try {
+    const user = req.user;
+    const { id } = req.params;
+
+    if (!id) {
+      res.status(401).json({
+        success: false,
+        message: "Please provide post id",
+      });
+      return;
+    }
+
+    if (!user) {
+      res.status(400).json({
+        success: false,
+        message: "Please Login Again",
+      });
+    }
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+      return;
+    }
+
+    const data = user.posts.indexOf(id);
+    user.posts.splice(data, 1);
+    user.save();
+    await post.deleteOne();
+
+    res.status(201).json({
+      success: true,
+      message: "Post deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
 module.exports = {
   registerUser,
   loginUser,
@@ -439,4 +486,5 @@ module.exports = {
   findFollowingPosts,
   searchUser,
   UserStatus,
+  deletePost,
 };

@@ -13,6 +13,7 @@ const {
   findFollowingPosts,
   searchUser,
   UserStatus,
+  deletePost,
 } = require("../controller/userController");
 
 const router = express.Router();
@@ -29,5 +30,6 @@ router.route("/allposts").get(protect, findAllPosts);
 router.route("/following/posts").get(protect, findFollowingPosts);
 router.route("/search/:key").get(protect, searchUser);
 router.route("/add/status").post(protect, UserStatus);
+router.route("/delete/:id").delete(protect, deletePost);
 
 module.exports = router;
