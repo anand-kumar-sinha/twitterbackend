@@ -2,6 +2,7 @@ const User = require("../models/User");
 const generate = require("../middleware/generateToken");
 const generateToken = require("../middleware/generateToken");
 const Post = require("../models/Post");
+const Comment = require("../models/Comment");
 
 const registerUser = async (req, res) => {
   try {
@@ -106,7 +107,7 @@ const myProfile = async (req, res) => {
 
     const id = req.user._id;
 
-    const posts = await User.findById(id).populate("posts");
+    const posts = await User.findById(id).populate("posts").populate("comments");
 
     res.status(200).json({
       success: true,
@@ -198,7 +199,7 @@ const fetchUserId = async (req, res) => {
       return;
     }
 
-    const user = await User.findById(id).populate("posts");
+    const user = await User.findById(id).populate("posts").populate("comments")
 
     if (!user) {
       res.status(401).json({
@@ -312,7 +313,7 @@ const createPost = async (req, res) => {
 
 const findAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find({}).populate("admin", "-password");
+    const posts = await Post.find({}).populate("admin", "-password").populate("comments");
 
     if (!posts) {
       return res.status(404).json({
@@ -473,6 +474,66 @@ const deletePost = async (req, res) => {
     });
   }
 };
+
+const commentOnPost = async (req, res) => {
+  try {
+    const {id} = req.params
+    const {comment} = req.body
+    const user = req.user
+
+    if (!id) {
+      res.status(401).json({
+        success: false,
+        message: "Please provide post id",
+      });
+      return;
+    }
+
+    if (!comment) {
+      res.status(401).json({
+        success: false,
+        message: "Please provide comment",
+      });
+      return;
+    }
+
+    const post = await Post.findById(id)
+
+    if(!post){
+      res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+      return;
+    }
+
+    const newComment = await Comment.create({comment, user: user._id})
+
+    if(!newComment){
+      res.status(404).json({
+        success: false,
+        message: "Something went wrong",
+      });
+      return;
+    }
+
+    post.comments.push(newComment._id)
+    post.save()
+
+    res.status(201).json({
+      success: true,
+      message: "Comment added successfully",
+      comment: newComment,
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -487,4 +548,5 @@ module.exports = {
   searchUser,
   UserStatus,
   deletePost,
+  commentOnPost
 };
