@@ -15,6 +15,7 @@ const {
   UserStatus,
   deletePost,
   commentOnPost,
+  findCommentsById,
 } = require("../controller/userController");
 
 const router = express.Router();
@@ -33,5 +34,6 @@ router.route("/search/:key").get(protect, searchUser);
 router.route("/add/status").post(protect, UserStatus);
 router.route("/delete/:id").delete(protect, deletePost);
 router.route("/comment/:id").post(protect, commentOnPost);
+router.route("/comment/:id").get(protect, findCommentsById);
 
 module.exports = router;

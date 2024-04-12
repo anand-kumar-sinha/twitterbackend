@@ -3,6 +3,7 @@ const generate = require("../middleware/generateToken");
 const generateToken = require("../middleware/generateToken");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
+const { populate } = require("dotenv");
 
 const registerUser = async (req, res) => {
   try {
@@ -313,7 +314,7 @@ const createPost = async (req, res) => {
 
 const findAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find({}).populate("admin", "-password").populate("comments");
+    const posts = await Post.find({}).populate("admin", "-password")
 
     if (!posts) {
       return res.status(404).json({
@@ -346,8 +347,6 @@ const findFollowingPosts = async (req, res) => {
     })
       .populate("admin")
       .populate("likes")
-      .populate("comments")
-      .populate("comments.user")
       .populate("retweets");
 
     let index = [];
@@ -534,6 +533,42 @@ const commentOnPost = async (req, res) => {
   }
 };
 
+const findCommentsById = async (req, res) =>{
+  try {
+    const {id} = req.params
+
+    if(!id){
+      res.status(401).json({
+        success: false,
+        message: "Please provide post id",
+      });
+      return;
+    }
+
+    const post = await Post.findById(id).populate({path: 'comments', populate: {path: 'user'}})
+
+    if(!post){
+      res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Comments fetched successfully",
+      comments: post.comments,
+    })
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
@@ -548,5 +583,6 @@ module.exports = {
   searchUser,
   UserStatus,
   deletePost,
-  commentOnPost
+  commentOnPost,
+  findCommentsById,
 };
