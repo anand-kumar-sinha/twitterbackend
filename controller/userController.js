@@ -107,7 +107,7 @@ const myProfile = async (req, res) => {
 
     const id = req.user._id;
 
-    const posts = await User.findById(id).populate("posts").populate("comments");
+    const posts = await User.findById(id).populate("posts");
 
     res.status(200).json({
       success: true,
