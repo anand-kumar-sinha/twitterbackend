@@ -200,7 +200,7 @@ const fetchUserId = async (req, res) => {
       return;
     }
 
-    const user = await User.findById(id).populate("posts").populate("comments")
+    const user = await User.findById(id).populate("posts");
 
     if (!user) {
       res.status(401).json({
@@ -314,7 +314,7 @@ const createPost = async (req, res) => {
 
 const findAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find({}).populate("admin", "-password")
+    const posts = await Post.find({}).populate("admin", "-password");
 
     if (!posts) {
       return res.status(404).json({
@@ -476,9 +476,9 @@ const deletePost = async (req, res) => {
 
 const commentOnPost = async (req, res) => {
   try {
-    const {id} = req.params
-    const {comment} = req.body
-    const user = req.user
+    const { id } = req.params;
+    const { comment } = req.body;
+    const user = req.user;
 
     if (!id) {
       res.status(401).json({
@@ -496,9 +496,9 @@ const commentOnPost = async (req, res) => {
       return;
     }
 
-    const post = await Post.findById(id)
+    const post = await Post.findById(id);
 
-    if(!post){
+    if (!post) {
       res.status(404).json({
         success: false,
         message: "Post not found",
@@ -506,25 +506,27 @@ const commentOnPost = async (req, res) => {
       return;
     }
 
-    const newComment = await Comment.create({comment, user: user._id})
+    const newComment = await Comment.create({
+      comment,
+      user: user._id,
+    });
 
-    if(!newComment){
+    if (!newComment) {
       res.status(404).json({
         success: false,
         message: "Something went wrong",
       });
-      return;
+      return;      
     }
 
-    post.comments.push(newComment._id)
-    post.save()
+    post.comments.push(newComment._id);
+    post.save();
 
     res.status(201).json({
       success: true,
       message: "Comment added successfully",
       comment: newComment,
-    })
-
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -533,11 +535,11 @@ const commentOnPost = async (req, res) => {
   }
 };
 
-const findCommentsById = async (req, res) =>{
+const findCommentsById = async (req, res) => {
   try {
-    const {id} = req.params
+    const { id } = req.params;
 
-    if(!id){
+    if (!id) {
       res.status(401).json({
         success: false,
         message: "Please provide post id",
@@ -545,9 +547,12 @@ const findCommentsById = async (req, res) =>{
       return;
     }
 
-    const post = await Post.findById(id).populate({path: 'comments', populate: {path: 'user'}})
+    const post = await Post.findById(id).populate({
+      path: "comments",
+      populate: { path: "user" },
+    });
 
-    if(!post){
+    if (!post) {
       res.status(404).json({
         success: false,
         message: "Post not found",
@@ -559,15 +564,14 @@ const findCommentsById = async (req, res) =>{
       success: true,
       message: "Comments fetched successfully",
       comments: post.comments,
-    })
-
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: error,
     });
   }
-}
+};
 
 module.exports = {
   registerUser,
