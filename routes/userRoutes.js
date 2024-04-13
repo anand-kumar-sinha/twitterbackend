@@ -16,6 +16,8 @@ const {
   deletePost,
   commentOnPost,
   findCommentsById,
+  likeAndUnlike,
+  retweet,
 } = require("../controller/userController");
 
 const router = express.Router();
@@ -35,5 +37,7 @@ router.route("/add/status").post(protect, UserStatus);
 router.route("/delete/:id").delete(protect, deletePost);
 router.route("/comment/:id").post(protect, commentOnPost);
 router.route("/comment/:id").get(protect, findCommentsById);
+router.route("/like/:id").get(protect, likeAndUnlike);
+router.route("/retweet/:id").get(protect, retweet);
 
 module.exports = router;

@@ -3,7 +3,6 @@ const generate = require("../middleware/generateToken");
 const generateToken = require("../middleware/generateToken");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
-const { populate } = require("dotenv");
 
 const registerUser = async (req, res) => {
   try {
@@ -516,7 +515,7 @@ const commentOnPost = async (req, res) => {
         success: false,
         message: "Something went wrong",
       });
-      return;      
+      return;
     }
 
     post.comments.push(newComment._id);
@@ -573,6 +572,112 @@ const findCommentsById = async (req, res) => {
   }
 };
 
+const likeAndUnlike = async (req, res) => {
+  try {
+    const {id} = req.params
+    const user = req.user
+
+    if (!id) {
+      res.status(401).json({
+        success: false,
+        message: "Please provide post id",
+      });
+      return;
+    }
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+      return;
+    }
+
+    const index = post.likes.indexOf(user._id);
+
+    if(index === -1){
+      post.likes.push(user._id)
+      post.save()
+
+      res.status(201).json({
+        success: true,
+        message: "Liked successfully",
+      })
+      return;
+    }
+
+    post.likes.splice(index, 1)
+    post.save()
+
+    res.status(201).json({
+      success: true,
+      message: "Unliked successfully",
+    })
+    return;
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
+const retweet = async (req, res) => {
+  try {
+    const {id} = req.params
+    const user = req.user
+
+    if (!id) {
+      res.status(401).json({
+        success: false,
+        message: "Please provide post id",
+      });
+      return;
+    }
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+      return;
+    }
+
+    const index = post.retweets.indexOf(user._id);
+
+    if(index === -1){
+      post.retweets.push(user._id)
+      post.save()
+
+      res.status(201).json({
+        success: true,
+        message: "Retweeted successfully",
+      })
+      return;
+    }
+
+    post.retweets.splice(index, 1)
+    post.save()
+
+    res.status(201).json({
+      success: true,
+      message: "Unretweeted successfully",
+    })
+    return;
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -589,4 +694,6 @@ module.exports = {
   deletePost,
   commentOnPost,
   findCommentsById,
+  likeAndUnlike,
+  retweet
 };
