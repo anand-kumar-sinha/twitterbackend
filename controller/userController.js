@@ -60,7 +60,7 @@ const loginUser = async (req, res) => {
       });
       return;
     }
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username }).populate('posts');
     if (!user) {
       res.status(401).json({
         success: false,
