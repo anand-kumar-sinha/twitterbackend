@@ -562,7 +562,7 @@ const findCommentsById = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Comments fetched successfully",
-      comments: post.comments.revers(),
+      comments: post.comments,
     });
   } catch (error) {
     res.status(500).json({
